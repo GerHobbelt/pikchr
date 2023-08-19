@@ -28,4 +28,13 @@ This warning was also described int the forum post.
 The Bitdefender antivirus software mistakenly quarantined the pikchr.exe 
 claiming it was infected by "virus gen:variant.lazy 202893"
 
+UPDATE 2023-08-19
+
+By tweaking the compiler options there was progress :
+cl /W4 -DPIKCHR_SHELL /MD /Ot pikchr.c
+
+The additional options are :
+/Ot : optimize for speed
+/MD : statically linked to MSVCRT.lib
+
 The whole project with the .exe is in the releases.
