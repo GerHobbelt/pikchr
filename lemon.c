@@ -48,7 +48,7 @@ extern int access(const char *path, int mode);
 #define MAXRHS 1000
 #endif
 
-extern void memory_error();
+extern void memory_error(void);
 static int showPrecedenceConflict = 0;
 static char *msort(char*,char**,int(*)(const char*,const char*));
 
@@ -509,7 +509,6 @@ struct lemon {
 };
 
 #define MemoryCheck(X) if((X)==0){ \
-  extern void memory_error(); \
   memory_error(); \
 }
 
@@ -1736,7 +1735,7 @@ static int defineCmp(const void *pA, const void *pB){
 }
 
 /* The main program.  Parse the command line and do it... */
-int main(int argc, char **argv){
+int main(int argc, const char **argv){
   static int version = 0;
   static int rpflag = 0;
   static int basisflag = 0;
@@ -1750,28 +1749,28 @@ int main(int argc, char **argv){
   static int printPP = 0;
   
   static struct s_options options[] = {
-    {OPT_FLAG, "b", (char*)&basisflag, "Print only the basis in report."},
-    {OPT_FLAG, "c", (char*)&compress, "Don't compress the action table."},
-    {OPT_FSTR, "d", (char*)&handle_d_option, "Output directory.  Default '.'"},
-    {OPT_FSTR, "D", (char*)handle_D_option, "Define an %ifdef macro."},
-    {OPT_FLAG, "E", (char*)&printPP, "Print input file after preprocessing."},
+    {OPT_FLAG, "b",  &basisflag, "Print only the basis in report."},
+    {OPT_FLAG, "c",  &compress, "Don't compress the action table."},
+    {OPT_FSTR, "d",  &handle_d_option, "Output directory.  Default '.'"},
+    {OPT_FSTR, "D",  handle_D_option, "Define an %ifdef macro."},
+    {OPT_FLAG, "E",  &printPP, "Print input file after preprocessing."},
     {OPT_FSTR, "f", 0, "Ignored.  (Placeholder for -f compiler options.)"},
-    {OPT_FLAG, "g", (char*)&rpflag, "Print grammar without actions."},
+    {OPT_FLAG, "g",  &rpflag, "Print grammar without actions."},
     {OPT_FSTR, "I", 0, "Ignored.  (Placeholder for '-I' compiler options.)"},
-    {OPT_FLAG, "m", (char*)&mhflag, "Output a makeheaders compatible file."},
-    {OPT_FLAG, "l", (char*)&nolinenosflag, "Do not print #line statements."},
+    {OPT_FLAG, "m",  &mhflag, "Output a makeheaders compatible file."},
+    {OPT_FLAG, "l",  &nolinenosflag, "Do not print #line statements."},
     {OPT_FSTR, "O", 0, "Ignored.  (Placeholder for '-O' compiler options.)"},
-    {OPT_FLAG, "p", (char*)&showPrecedenceConflict,
+    {OPT_FLAG, "p",  &showPrecedenceConflict,
                     "Show conflicts resolved by precedence rules"},
-    {OPT_FLAG, "q", (char*)&quiet, "(Quiet) Don't print the report file."},
-    {OPT_FLAG, "r", (char*)&noResort, "Do not sort or renumber states"},
-    {OPT_FLAG, "s", (char*)&statistics,
+    {OPT_FLAG, "q",  &quiet, "(Quiet) Don't print the report file."},
+    {OPT_FLAG, "r",  &noResort, "Do not sort or renumber states"},
+    {OPT_FLAG, "s",  &statistics,
                                    "Print parser stats to standard output."},
-    {OPT_FLAG, "S", (char*)&sqlFlag,
+    {OPT_FLAG, "S",  &sqlFlag,
                     "Generate the *.sql file describing the parser tables."},
-    {OPT_FLAG, "x", (char*)&version, "Print the version number."},
-    {OPT_FSTR, "T", (char*)handle_T_option, "Specify a template file."},
-    {OPT_FSTR, "U", (char*)handle_U_option, "Undefine a macro."},
+    {OPT_FLAG, "x",  &version, "Print the version number."},
+    {OPT_FSTR, "T",  handle_T_option, "Specify a template file."},
+    {OPT_FSTR, "U",  handle_U_option, "Undefine a macro."},
     {OPT_FSTR, "W", 0, "Ignored.  (Placeholder for '-W' compiler options.)"},
     {OPT_FLAG,0,0,0}
   };
@@ -5808,7 +5807,7 @@ struct symbol *Symbol_Nth(int n)
 }
 
 /* Return the size of the array */
-int Symbol_count()
+int Symbol_count(void)
 {
   return x2a ? x2a->count : 0;
 }
@@ -5816,7 +5815,7 @@ int Symbol_count()
 /* Return an array of pointers to all data in the table.
 ** The array is obtained from malloc.  Return NULL if memory allocation
 ** problems, or if the array is empty. */
-struct symbol **Symbol_arrayof()
+struct symbol **Symbol_arrayof(void)
 {
   struct symbol **array;
   int i,arrSize;
@@ -5867,7 +5866,7 @@ PRIVATE unsigned statehash(struct config *a)
 }
 
 /* Allocate a new state structure */
-struct state *State_new()
+struct state *State_new(void)
 {
   struct state *newstate;
   newstate = (struct state *)lemon_calloc(1, sizeof(struct state) );

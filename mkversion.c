@@ -81,7 +81,7 @@ static void hash(const char *zIn, int N, char *zOut){
   zOut[n] = 0;
 }
 
-int main(int argc, char *argv[]){
+int main(int argc, const char **argv) {
     FILE *m,*u,*v;
     char *z;
 #if defined(__DMC__)            /* e.g. 0x857 */
